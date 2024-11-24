@@ -1,42 +1,32 @@
 import os
+import logging
+
 from lightrag import LightRAG, QueryParam
-from lightrag.llm import gpt_4o_mini_complete, gpt_4o_complete
-#########
-# Uncomment the below two lines if running in a jupyter notebook to handle the async nature of rag.insert()
-# import nest_asyncio
-# nest_asyncio.apply()
-#########
+from lightrag.llm import bedrock_complete, bedrock_embedding
+from lightrag.utils import EmbeddingFunc
+
+logging.getLogger("aiobotocore").setLevel(logging.WARNING)
 
 WORKING_DIR = "./dickens"
-
 if not os.path.exists(WORKING_DIR):
     os.mkdir(WORKING_DIR)
 
 rag = LightRAG(
     working_dir=WORKING_DIR,
-    llm_model_func=gpt_4o_mini_complete,  # Use gpt_4o_mini_complete LLM model
-    # llm_model_func=gpt_4o_complete  # Optionally, use a stronger model
+    llm_model_func=bedrock_complete,
+    llm_model_name="Anthropic Claude 3 Haiku // Amazon Bedrock",
+    embedding_func=EmbeddingFunc(
+        embedding_dim=1024, max_token_size=8192, func=bedrock_embedding
+    ),
 )
 
-with open("./book.txt") as f:
+with open("./book.txt", "r", encoding="utf-8") as f:
     rag.insert(f.read())
 
-# Perform naive search
-print(
-    rag.query("What are the top themes in this story?", param=QueryParam(mode="naive"))
-)
-
-# Perform local search
-print(
-    rag.query("What are the top themes in this story?", param=QueryParam(mode="local"))
-)
-
-# Perform global search
-print(
-    rag.query("What are the top themes in this story?", param=QueryParam(mode="global"))
-)
-
-# Perform hybrid search
-print(
-    rag.query("What are the top themes in this story?", param=QueryParam(mode="hybrid"))
-)
+for mode in ["naive", "local", "global", "hybrid"]:
+    print("\n+-" + "-" * len(mode) + "-+")
+    print(f"| {mode.capitalize()} |")
+    print("+-" + "-" * len(mode) + "-+\n")
+    print(
+        rag.query("What are the top themes in this story?", param=QueryParam(mode=mode))
+    )

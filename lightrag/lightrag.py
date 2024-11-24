@@ -69,6 +69,7 @@ class LightRAG:
     )
 
     kg: str = field(default="NetworkXStorage")
+    prompts: dict = field(default_factory=dict)
 
     current_log_level = logger.level
     log_level: str = field(default=current_log_level)
@@ -127,6 +128,10 @@ class LightRAG:
         _print_config = ",\n  ".join([f"{k} = {v}" for k, v in asdict(self).items()])
         logger.debug(f"LightRAG init with param:\n  {_print_config}\n")
 
+        # Merge custom prompts with default prompts
+        from .prompt import PROMPTS as DEFAULT_PROMPTS
+        self.prompts = {**DEFAULT_PROMPTS, **self.prompts}  # Custom prompts override defaults
+        
         # @TODO: should move all storage setup here to leverage initial start params attached to self.
         self.graph_storage_cls: Type[BaseGraphStorage] = self._get_storage_class()[
             self.kg

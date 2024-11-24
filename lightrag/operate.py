@@ -245,18 +245,19 @@ async def extract_entities(
 ) -> Union[BaseGraphStorage, None]:
     use_llm_func: callable = global_config["llm_model_func"]
     entity_extract_max_gleaning = global_config["entity_extract_max_gleaning"]
+    prompts = global_config.get("prompts", PROMPTS)  # Get custom prompts or use defaults
 
     ordered_chunks = list(chunks.items())
 
-    entity_extract_prompt = PROMPTS["entity_extraction"]
+    entity_extract_prompt = prompts["entity_extraction"]
     context_base = dict(
-        tuple_delimiter=PROMPTS["DEFAULT_TUPLE_DELIMITER"],
-        record_delimiter=PROMPTS["DEFAULT_RECORD_DELIMITER"],
-        completion_delimiter=PROMPTS["DEFAULT_COMPLETION_DELIMITER"],
-        entity_types=",".join(PROMPTS["DEFAULT_ENTITY_TYPES"]),
+        tuple_delimiter=prompts["DEFAULT_TUPLE_DELIMITER"],
+        record_delimiter=prompts["DEFAULT_RECORD_DELIMITER"],
+        completion_delimiter=prompts["DEFAULT_COMPLETION_DELIMITER"],
+        entity_types=",".join(prompts["DEFAULT_ENTITY_TYPES"]),
     )
-    continue_prompt = PROMPTS["entiti_continue_extraction"]
-    if_loop_prompt = PROMPTS["entiti_if_loop_extraction"]
+    continue_prompt = prompts["entiti_continue_extraction"]
+    if_loop_prompt = prompts["entiti_if_loop_extraction"]
 
     already_processed = 0
     already_entities = 0
@@ -318,8 +319,8 @@ async def extract_entities(
         already_processed += 1
         already_entities += len(maybe_nodes)
         already_relations += len(maybe_edges)
-        now_ticks = PROMPTS["process_tickers"][
-            already_processed % len(PROMPTS["process_tickers"])
+        now_ticks = prompts["process_tickers"][
+            already_processed % len(prompts["process_tickers"])
         ]
         print(
             f"{now_ticks} Processed {already_processed} chunks, {already_entities} entities(duplicated), {already_relations} relations(duplicated)\r",
@@ -397,10 +398,11 @@ async def local_query(
     query_param: QueryParam,
     global_config: dict,
 ) -> str:
+    prompts = global_config.get("prompts", PROMPTS)  # Get custom prompts or use defaults
     context = None
     use_model_func = global_config["llm_model_func"]
 
-    kw_prompt_temp = PROMPTS["keywords_extraction"]
+    kw_prompt_temp = prompts["keywords_extraction"]
     kw_prompt = kw_prompt_temp.format(query=query)
     result = await use_model_func(kw_prompt)
 
@@ -664,10 +666,11 @@ async def global_query(
     query_param: QueryParam,
     global_config: dict,
 ) -> str:
+    prompts = global_config.get("prompts", PROMPTS)  # Get custom prompts or use defaults
     context = None
     use_model_func = global_config["llm_model_func"]
 
-    kw_prompt_temp = PROMPTS["keywords_extraction"]
+    kw_prompt_temp = prompts["keywords_extraction"]
     kw_prompt = kw_prompt_temp.format(query=query)
     result = await use_model_func(kw_prompt)
 
@@ -903,11 +906,12 @@ async def hybrid_query(
     query_param: QueryParam,
     global_config: dict,
 ) -> str:
+    prompts = global_config.get("prompts", PROMPTS)  # Get custom prompts or use defaults
     low_level_context = None
     high_level_context = None
     use_model_func = global_config["llm_model_func"]
 
-    kw_prompt_temp = PROMPTS["keywords_extraction"]
+    kw_prompt_temp = prompts["keywords_extraction"]
     kw_prompt = kw_prompt_temp.format(query=query)
 
     result = await use_model_func(kw_prompt)

@@ -145,15 +145,15 @@ async def bedrock_complete_if_cache(
     aws_session_token=None,
     **kwargs,
 ) -> str:
-    os.environ["AWS_ACCESS_KEY_ID"] = os.environ.get(
-        "AWS_ACCESS_KEY_ID", aws_access_key_id
-    )
-    os.environ["AWS_SECRET_ACCESS_KEY"] = os.environ.get(
-        "AWS_SECRET_ACCESS_KEY", aws_secret_access_key
-    )
-    os.environ["AWS_SESSION_TOKEN"] = os.environ.get(
-        "AWS_SESSION_TOKEN", aws_session_token
-    )
+    # os.environ["AWS_ACCESS_KEY_ID"] = os.environ.get(
+    #     "AWS_ACCESS_KEY_ID", aws_access_key_id
+    # )
+    # os.environ["AWS_SECRET_ACCESS_KEY"] = os.environ.get(
+    #     "AWS_SECRET_ACCESS_KEY", aws_secret_access_key
+    # )
+    # os.environ["AWS_SESSION_TOKEN"] = os.environ.get(
+    #     "AWS_SESSION_TOKEN", aws_session_token
+    # )
 
     # Fix message history format
     messages = []
@@ -633,15 +633,15 @@ async def bedrock_embedding(
     aws_secret_access_key=None,
     aws_session_token=None,
 ) -> np.ndarray:
-    os.environ["AWS_ACCESS_KEY_ID"] = os.environ.get(
-        "AWS_ACCESS_KEY_ID", aws_access_key_id
-    )
-    os.environ["AWS_SECRET_ACCESS_KEY"] = os.environ.get(
-        "AWS_SECRET_ACCESS_KEY", aws_secret_access_key
-    )
-    os.environ["AWS_SESSION_TOKEN"] = os.environ.get(
-        "AWS_SESSION_TOKEN", aws_session_token
-    )
+    # os.environ["AWS_ACCESS_KEY_ID"] = os.environ.get(
+    #     "AWS_ACCESS_KEY_ID", aws_access_key_id
+    # )
+    # os.environ["AWS_SECRET_ACCESS_KEY"] = os.environ.get(
+    #     "AWS_SECRET_ACCESS_KEY", aws_secret_access_key
+    # )
+    # os.environ["AWS_SESSION_TOKEN"] = os.environ.get(
+    #     "AWS_SESSION_TOKEN", aws_session_token
+    # )
 
     session = aioboto3.Session()
     async with session.client("bedrock-runtime") as bedrock_async_client:
