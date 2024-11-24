@@ -1,5 +1,97 @@
 <center><h2>🚀 LightRAG: Simple and Fast Retrieval-Augmented Generation</h2></center>
 
+## 🚀 Quick Deployment Guide
+
+### Backend Setup
+1. Install the required dependencies:
+```bash
+pip install lightrag-hku fastapi uvicorn pydantic
+```
+
+2. Configure AWS credentials (required for Bedrock):
+```bash
+# Option 1: Using AWS CLI
+aws configure
+
+# Option 2: Set environment variables
+export AWS_ACCESS_KEY_ID="your_access_key"
+export AWS_SECRET_ACCESS_KEY="your_secret_key"
+export AWS_REGION="your_region"
+```
+
+3. Start the backend server:
+```bash
+python examples/lightrag_api_bedrock_demo.py
+```
+The server will run on http://localhost:8020
+
+### Frontend Setup
+1. Create a new React project with TypeScript:
+```bash
+npx create-react-app frontend --template typescript
+cd frontend
+```
+
+2. Install required dependencies:
+```bash
+npm install @cloudscape-design/components @cloudscape-design/global-styles react-router-dom
+```
+
+3. Copy the frontend files to their respective locations:
+- `src/App.tsx`
+- `src/components/Navigation.tsx`
+- `src/pages/Upload.tsx`
+- `src/pages/Chat.tsx`
+
+4. Configure Node.js environment:
+Choose one of these options to resolve OpenSSL issues:
+
+Option 1: Set Node options (recommended for development):
+```bash
+# Linux/MacOS
+export NODE_OPTIONS=--openssl-legacy-provider
+
+# Windows
+set NODE_OPTIONS=--openssl-legacy-provider
+```
+
+Option 2: Downgrade Node.js to a compatible version:
+```bash
+# Using nvm (Node Version Manager)
+nvm install 16.20.0
+nvm use 16.20.0
+```
+
+5. Start the frontend development server:
+```bash
+npm start
+```
+The frontend will run on http://localhost:3000
+
+6. Start the backend development server:
+```bash
+uvicorn examples.lightrag_api_bedrock_demo:app --reload --host 0.0.0.0 --port 8020
+```
+The backend will run on http://localhost:8020
+### Features
+- **Upload Page**: 
+  - Text input for direct content insertion
+  - File upload support for document ingestion
+  - Support for various file encodings (UTF-8, GBK)
+
+- **Chat Page**:
+  - Interactive question-answering interface
+  - Displays responses using four different RAG modes:
+    - Naive: Basic RAG implementation
+    - Local: Entity-focused retrieval
+    - Global: Relationship-focused retrieval
+    - Hybrid: Combined approach
+
+### System Requirements
+- Python ≥ 3.9.11
+- Node.js ≥ 14
+- AWS account with Bedrock access
+- 8GB RAM minimum (recommended: 16GB)
 
 ![请添加图片描述](https://i-blog.csdnimg.cn/direct/567139f1a36e4564abc63ce5c12b6271.jpeg)
 
