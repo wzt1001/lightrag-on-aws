@@ -17,3 +17,6 @@ ignore_this.txt
 .env.test.local
 .env.production.local
 index_default/
+*.ignore.*
+.ruff_cache/
+frontend/node_modules/

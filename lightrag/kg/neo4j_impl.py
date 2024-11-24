@@ -86,9 +86,6 @@ class Neo4JStorage(BaseGraphStorage):
             )
             return single_result["edgeExists"]
 
-        def close(self):
-            self._driver.close()
-
     async def get_node(self, node_id: str) -> Union[dict, None]:
         async with self._driver.session() as session:
             entity_name_label = node_id.strip('"')
@@ -146,11 +143,11 @@ class Neo4JStorage(BaseGraphStorage):
         entity_name_label_target = target_node_id.strip('"')
         """
         Find all edges between nodes of two given labels
-        
+
         Args:
             source_node_label (str): Label of the source nodes
             target_node_label (str): Label of the target nodes
-            
+
         Returns:
             list: List of all relationships/edges found
         """
@@ -214,6 +211,7 @@ class Neo4JStorage(BaseGraphStorage):
                 neo4jExceptions.ServiceUnavailable,
                 neo4jExceptions.TransientError,
                 neo4jExceptions.WriteServiceUnavailable,
+                neo4jExceptions.ClientError,
             )
         ),
     )

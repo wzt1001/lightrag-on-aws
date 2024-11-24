@@ -2,10 +2,12 @@ import os
 import logging
 
 from lightrag import LightRAG, QueryParam
-from lightrag.llm import bedrock_complete, bedrock_embedding
-from lightrag.utils import EmbeddingFunc
-
-logging.getLogger("aiobotocore").setLevel(logging.WARNING)
+from lightrag.llm import gpt_4o_mini_complete
+#########
+# Uncomment the below two lines if running in a jupyter notebook to handle the async nature of rag.insert()
+# import nest_asyncio
+# nest_asyncio.apply()
+#########
 
 WORKING_DIR = "./dickens"
 if not os.path.exists(WORKING_DIR):
@@ -20,7 +22,7 @@ rag = LightRAG(
     ),
 )
 
-with open("./book.txt", "r", encoding="utf-8") as f:
+with open("./dickens/book.txt", "r", encoding="utf-8") as f:
     rag.insert(f.read())
 
 for mode in ["naive", "local", "global", "hybrid"]:
